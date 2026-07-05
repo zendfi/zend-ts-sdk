@@ -1,0 +1,41 @@
+{
+  "name": "pay-with-zend-sdk",
+  "version": "0.1.0",
+  "description": "Typed TypeScript SDK for Pay with Zend — programmatic payment requests, webhook signature verification, and return-token verification against a Zend user's own account.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "fast-check": "^3.19.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.5.4",
+    "vitest": "^1.6.0"
+  }
+}
