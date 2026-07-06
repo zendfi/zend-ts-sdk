@@ -24,6 +24,7 @@ export type {
   PairingSessionStatusResult,
   PaymentRequestStatus,
   RetrievePairingKeyResult,
+  TestPaymentRequestResult,
   VerifyReturnTokenInput,
   VerifyReturnTokenResult,
   WebhookConfig,

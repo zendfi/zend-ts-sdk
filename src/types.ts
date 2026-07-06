@@ -91,6 +91,17 @@ export interface WebhookConfig {
   hasSecret: boolean;
 }
 
+/** Result of {@link ZendClient.testPaymentRequest} — Sandbox Mode dry-run. */
+export interface TestPaymentRequestResult {
+  sandbox: true;
+  valid: boolean;
+  amountUsdc: number;
+  description: string | null;
+  expiresInMinutes: number;
+  redirectUrl: string | null;
+  webhookUrl: string | null;
+}
+
 export interface CreateApiKeyInput {
   scopes: Array<"create_payment_request" | "read" | "manage_webhook">;
 }

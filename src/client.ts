@@ -11,6 +11,7 @@ import type {
   ListPaymentRequestsParams,
   PairingSessionStatusResult,
   RetrievePairingKeyResult,
+  TestPaymentRequestResult,
   VerifyReturnTokenInput,
   VerifyReturnTokenResult,
   WebhookConfig,
@@ -91,6 +92,9 @@ async function request<T>(
  */
 export interface ZendClient {
   createZendPayment(input: CreatePaymentRequestInput): Promise<CreatePaymentRequestResult>;
+  /** Sandbox Mode dry-run — validates `input` exactly as `createZendPayment` would, but never
+   * creates a payment request, moves funds, or delivers a live Developer Webhook Event. */
+  testPaymentRequest(input: CreatePaymentRequestInput): Promise<TestPaymentRequestResult>;
   getPaymentRequest(id: string): Promise<GetPaymentRequestResult>;
   listPaymentRequests(params?: ListPaymentRequestsParams): Promise<GetPaymentRequestResult[]>;
   verifyReturnToken(input: VerifyReturnTokenInput): Promise<VerifyReturnTokenResult>;
@@ -153,6 +157,38 @@ class ZendClientImpl implements ZendClient {
       description: result.description,
       expiresAt: result.expires_at,
       source: result.source,
+    };
+  }
+
+  async testPaymentRequest(input: CreatePaymentRequestInput): Promise<TestPaymentRequestResult> {
+    const body = {
+      amount_usdc: input.amountUsdc,
+      description: input.description,
+      expires_in_minutes: input.expiresInMinutes,
+      redirect_url: input.redirectUrl,
+      webhook_url: input.webhookUrl,
+    };
+    const result = await request<{
+      sandbox: true;
+      valid: boolean;
+      amount_usdc: number;
+      description: string | null;
+      expires_in_minutes: number;
+      redirect_url: string | null;
+      webhook_url: string | null;
+    }>(this.baseUrl, "/api/v1/dev/payment-requests/test", {
+      method: "POST",
+      body: JSON.stringify(body),
+      authHeader: this.authHeader(),
+    });
+    return {
+      sandbox: result.sandbox,
+      valid: result.valid,
+      amountUsdc: result.amount_usdc,
+      description: result.description,
+      expiresInMinutes: result.expires_in_minutes,
+      redirectUrl: result.redirect_url,
+      webhookUrl: result.webhook_url,
     };
   }
 
