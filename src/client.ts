@@ -19,7 +19,10 @@ import type {
   ZendClientConfig,
 } from "./types.js";
 
-const DEFAULT_BASE_URL = "https://zdfi.me";
+// The Zend backend API — zdfi.me is the human-facing web app/link domain
+// only (no API routes live there); all REST calls go directly to the
+// Rust backend.
+const DEFAULT_BASE_URL = "https://api-v2.zendfi.tech";
 
 interface BackendErrorBody {
   error?: string;

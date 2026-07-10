@@ -70,7 +70,7 @@ const payment = await createZendPayment(
 ```typescript
 interface ZendClientConfig {
   apiKey: string;
-  baseUrl?: string; // defaults to https://zdfi.me
+  baseUrl?: string; // defaults to https://api-v2.zendfi.tech
 }
 ```
 

@@ -9,7 +9,7 @@
 export interface ZendClientConfig {
   /** A User API Key issued via CLI Pairing (`zdev_...`). Never a merchant API key. */
   apiKey: string;
-  /** Defaults to `https://zdfi.me`. Override for local/staging testing. */
+  /** Defaults to `https://api-v2.zendfi.tech`. Override for local/staging testing. */
   baseUrl?: string;
 }
 
