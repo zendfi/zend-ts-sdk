@@ -133,7 +133,7 @@ class ZendClientImpl implements ZendClient {
 
   async createZendPayment(input: CreatePaymentRequestInput): Promise<CreatePaymentRequestResult> {
     const body = {
-      amount_usdc: input.amountUsdc,
+      amount: input.amount,
       description: input.description,
       expires_in_minutes: input.expiresInMinutes,
       redirect_url: input.redirectUrl,
@@ -143,7 +143,7 @@ class ZendClientImpl implements ZendClient {
       id: string;
       link_url: string;
       status: "pending";
-      amount_usdc: number;
+      amount: number;
       description: string | null;
       expires_at: string;
       source: "api";
@@ -156,7 +156,7 @@ class ZendClientImpl implements ZendClient {
       id: result.id,
       linkUrl: result.link_url,
       status: result.status,
-      amountUsdc: result.amount_usdc,
+      amount: result.amount,
       description: result.description,
       expiresAt: result.expires_at,
       source: result.source,
@@ -165,7 +165,7 @@ class ZendClientImpl implements ZendClient {
 
   async testPaymentRequest(input: CreatePaymentRequestInput): Promise<TestPaymentRequestResult> {
     const body = {
-      amount_usdc: input.amountUsdc,
+      amount: input.amount,
       description: input.description,
       expires_in_minutes: input.expiresInMinutes,
       redirect_url: input.redirectUrl,
@@ -174,7 +174,7 @@ class ZendClientImpl implements ZendClient {
     const result = await request<{
       sandbox: true;
       valid: boolean;
-      amount_usdc: number;
+      amount: number;
       description: string | null;
       expires_in_minutes: number;
       redirect_url: string | null;
@@ -187,7 +187,7 @@ class ZendClientImpl implements ZendClient {
     return {
       sandbox: result.sandbox,
       valid: result.valid,
-      amountUsdc: result.amount_usdc,
+      amount: result.amount,
       description: result.description,
       expiresInMinutes: result.expires_in_minutes,
       redirectUrl: result.redirect_url,
@@ -199,7 +199,7 @@ class ZendClientImpl implements ZendClient {
     const result = await request<{
       id: string;
       status: GetPaymentRequestResult["status"];
-      amount_usdc: number | null;
+      amount: number | null;
       description: string | null;
       expires_at: string | null;
       paid_at: string | null;
@@ -212,7 +212,7 @@ class ZendClientImpl implements ZendClient {
     return {
       id: result.id,
       status: result.status,
-      amountUsdc: result.amount_usdc,
+      amount: result.amount,
       description: result.description,
       expiresAt: result.expires_at,
       paidAt: result.paid_at,
@@ -230,7 +230,7 @@ class ZendClientImpl implements ZendClient {
       requests: Array<{
         id: string;
         status: GetPaymentRequestResult["status"];
-        amount_usdc: number | null;
+        amount: number | null;
         description: string | null;
         expires_at: string | null;
         paid_at: string | null;
@@ -244,7 +244,7 @@ class ZendClientImpl implements ZendClient {
     return result.requests.map((r) => ({
       id: r.id,
       status: r.status,
-      amountUsdc: r.amount_usdc,
+      amount: r.amount,
       description: r.description,
       expiresAt: r.expires_at,
       paidAt: r.paid_at,

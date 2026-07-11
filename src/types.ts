@@ -15,7 +15,8 @@ export interface ZendClientConfig {
 
 /** Input to {@link ZendClient.createZendPayment}. */
 export interface CreatePaymentRequestInput {
-  amountUsdc: number;
+  /** Amount in USD. */
+  amount: number;
   description?: string;
   /** 1-60 minutes; defaults to 15 minutes when omitted. */
   expiresInMinutes?: number;
@@ -33,7 +34,8 @@ export interface CreatePaymentRequestResult {
   /** The `zdfi.me` link — usable for both app deep-linking and hosted web fallback. */
   linkUrl: string;
   status: "pending";
-  amountUsdc: number;
+  /** Amount in USD. */
+  amount: number;
   description: string | null;
   expiresAt: string;
   source: "api";
@@ -43,7 +45,8 @@ export interface CreatePaymentRequestResult {
 export interface GetPaymentRequestResult {
   id: string;
   status: PaymentRequestStatus;
-  amountUsdc: number | null;
+  /** Amount in USD. */
+  amount: number | null;
   description: string | null;
   expiresAt: string | null;
   paidAt: string | null;
@@ -65,13 +68,17 @@ export type DeveloperWebhookEventType =
   | "payment_request_expired"
   | "payment_request_cancelled";
 
-/** Shape of a Developer Webhook Event payload delivered to a configured webhook URL. */
+/**
+ * Shape of a Developer Webhook Event payload delivered to a configured
+ * webhook URL. Fields here match the exact JSON the backend sends over
+ * the wire.
+ */
 export interface DeveloperWebhookEvent {
   event: DeveloperWebhookEventType;
   timestamp: string;
   payment_request: {
     id: string;
-    amount_usdc: number | null;
+    amount: number | null;
     description: string | null;
     status: string;
   };
@@ -95,7 +102,8 @@ export interface WebhookConfig {
 export interface TestPaymentRequestResult {
   sandbox: true;
   valid: boolean;
-  amountUsdc: number;
+  /** Amount in USD. */
+  amount: number;
   description: string | null;
   expiresInMinutes: number;
   redirectUrl: string | null;

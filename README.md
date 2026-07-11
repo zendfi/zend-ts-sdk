@@ -2,7 +2,7 @@
 
 A fully typed TypeScript SDK for **Pay with Zend** — create payment requests against your own Zend account, verify webhook signatures, and confirm post-payment return tokens, all from your own backend or scripts.
 
-This SDK is not a merchant integration. There is no separate "merchant" account type here — a **Developer** is just a regular Zend user who has paired a CLI (or otherwise obtained a User API Key) to their own account. Every request this SDK makes settles directly to that user's own wallet.
+This SDK is not a merchant integration. There is no separate "merchant" account type here — a **Developer** is just a regular Zend user who has paired a CLI (or otherwise obtained a User API Key) to their own account. Every request this SDK makes settles directly to that user's own Zend account.
 
 > Looking for the CLI instead? See [`pay-with-zend-cli`](../zend-cli/README.md) — it uses this SDK internally and is usually the fastest way to get an API key in the first place.
 
@@ -16,7 +16,7 @@ pnpm add pay-with-zend-sdk
 yarn add pay-with-zend-sdk
 ```
 
-Requires Node.js 18 or later (uses the global `fetch` and `node:crypto`).
+Requires Node.js 18 or later.
 
 ## Getting an API key
 
@@ -40,14 +40,14 @@ const zend = createZendClient({
 });
 
 const payment = await zend.createZendPayment({
-  amountUsdc: 25.0,
+  amount: 25.0,
   description: "Order #1024",
   redirectUrl: "https://yourapp.com/checkout/return",
   webhookUrl: "https://yourapp.com/webhooks/zend", // optional per-request override
 });
 
 console.log(payment.linkUrl);
-// https://zdfi.me/yourtag/abc123def0
+// https://zdfi.me/@yourtag/abc123def0
 ```
 
 Share `payment.linkUrl` with your customer. On a phone with the Zend App installed, it deep-links straight into a native payment confirmation sheet. Without the app, it falls back to the hosted `zdfi.me` web checkout. Same link, both paths — you don't need to detect which one applies.
@@ -59,7 +59,7 @@ import { createZendPayment } from "pay-with-zend-sdk";
 
 const payment = await createZendPayment(
   { apiKey: process.env.ZEND_API_KEY! },
-  { amountUsdc: 25.0 },
+  { amount: 25.0 },
 );
 ```
 
@@ -82,7 +82,7 @@ Returns a `ZendClient` with the methods below. Every method throws `ZendPaymentE
 
 ```typescript
 interface CreatePaymentRequestInput {
-  amountUsdc: number;          // 0.01 - 100,000
+  amount: number;                // USD, 0.01 - 100,000
   description?: string;         // max 500 characters
   expiresInMinutes?: number;    // 1 - 60, defaults to 15
   redirectUrl?: string;         // HTTPS, max 2048 characters
@@ -97,7 +97,7 @@ interface CreatePaymentRequestResult {
   id: string;
   linkUrl: string;             // the zdfi.me link — share this with your customer
   status: "pending";
-  amountUsdc: number;
+  amount: number;                // USD
   description: string | null;
   expiresAt: string;           // ISO 8601
   source: "api";
@@ -110,7 +110,7 @@ interface CreatePaymentRequestResult {
 
 ```typescript
 const request = await zend.getPaymentRequest(payment.id);
-// { id, status, amountUsdc, description, expiresAt, paidAt, hasRedirectUrl, linkUrl }
+// { id, status, amount, description, expiresAt, paidAt, hasRedirectUrl, linkUrl }
 ```
 
 `status` is one of `"pending" | "paid" | "expired" | "cancelled"`. Requesting a payment request that doesn't exist, or belongs to a different account, returns an identical "not found" error in both cases — the SDK (and the API underneath it) never reveals which.
@@ -128,8 +128,8 @@ const { requests } = await zend.listPaymentRequests({ status: "paid", limit: 20 
 Takes the exact same input as `createZendPayment`, runs the exact same validation server-side, but never creates a request, moves funds, or fires a webhook:
 
 ```typescript
-const result = await zend.testPaymentRequest({ amountUsdc: 25.0 });
-// { sandbox: true, valid: true, amountUsdc: 25, description: null, expiresInMinutes: 15, redirectUrl: null, webhookUrl: null }
+const result = await zend.testPaymentRequest({ amount: 25.0 });
+// { sandbox: true, valid: true, amount: 25, description: null, expiresInMinutes: 15, redirectUrl: null, webhookUrl: null }
 ```
 
 Useful in CI or local dev to confirm your integration is sending well-formed requests without touching a real balance.
@@ -238,7 +238,7 @@ Every SDK method throws `ZendPaymentError` on failure:
 import { ZendPaymentError } from "pay-with-zend-sdk";
 
 try {
-  await zend.createZendPayment({ amountUsdc: -5 });
+  await zend.createZendPayment({ amount: -5 });
 } catch (err) {
   if (err instanceof ZendPaymentError) {
     console.error(err.code);       // e.g. "INVALID_AMOUNT"

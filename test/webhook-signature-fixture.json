@@ -1,7 +1,7 @@
 {
   "_comment": "Generated from the real Rust implementation (crate::webhooks::generate_webhook_signature) via `cargo test print_webhook_signature_fixture -- --nocapture`. If the backend signing algorithm ever changes, regenerate this fixture the same way so drift is caught here rather than only in production.",
   "secret": "whsec_a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
-  "payload": "{\"event\":\"payment_request_succeeded\",\"payment_request\":{\"id\":\"abc123\",\"amount_usdc\":10.5,\"description\":null,\"status\":\"paid\"},\"timestamp\":\"2023-11-14T22:13:20Z\"}",
+  "payload": "{\"event\":\"payment_request_succeeded\",\"payment_request\":{\"id\":\"abc123\",\"amount\":10.5,\"description\":null,\"status\":\"paid\"},\"timestamp\":\"2023-11-14T22:13:20Z\"}",
   "timestamp": 1700000000,
-  "signatureHeader": "t=1700000000,v1=033fc6070d24e364d2a644010d0f62f56dd0fac39c1e2c8d824c5e45c5a6b1eb"
+  "signatureHeader": "t=1700000000,v1=39c7c00d78e1e2a79fafd06bfbbee6ce97e9ee695f1f2f285a60f51384d1cb04"
 }
