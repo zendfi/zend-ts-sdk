@@ -1,6 +1,6 @@
 {
   "name": "pay-with-zend-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Typed TypeScript SDK for Pay with Zend — programmatic payment requests, webhook signature verification, and return-token verification against a Zend user's own account.",
   "license": "MIT",
   "type": "module",
